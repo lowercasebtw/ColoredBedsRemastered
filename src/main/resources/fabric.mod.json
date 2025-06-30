@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "colored_beds_remastered",
+	"version": "${version}",
+	"name": "Colored Beds Remastered",
+	"description": "A remake of the classic colored beds mod that backports the 1.12 colored beds, for Bedwars!",
+	"authors": [
+		"lowercasebtw"
+	],
+	"contact": {
+		"sources": "https://github.com/Legacy-Visuals-Project/ColoredBedsRemastered/",
+		"issues": "https://github.com/Legacy-Visuals-Project/ColoredBedsRemastered/issues"
+	},
+	"license": "GPL-3.0",
+	"icon": "assets/colored_beds_remastered/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"btw.lowercase.colored_beds_remastered.ColoredBedsRemastered"
+		]
+	},
+	"mixins": [
+		{
+			"config": "colored_beds_remastered.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.14.19",
+		"minecraft": "1.8.9"
+	}
+}
