@@ -13,23 +13,22 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-
 @Mixin(ModelLoader.class)
 public abstract class MixinModelLoader {
-    @Shadow protected abstract ModelVariantMap method_10391(Identifier identifier);
+    @Shadow
+    protected abstract ModelVariantMap method_10391(Identifier identifier);
 
-    @Shadow protected abstract void method_10387(ModelVariantMap modelVariantMap, ModelIdentifier modelIdentifier);
+    @Shadow
+    protected abstract void method_10387(ModelVariantMap modelVariantMap, ModelIdentifier modelIdentifier);
 
     @Inject(method = "method_10393", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelLoader;method_10396()V"))
     private void coloredBedsRemastered$loadBlockstates(CallbackInfo ci) {
-        for (BedColor c : BedColor.values()) {
-            Identifier identifier = c.getIdentifier();
+        for (BedColor bedColor : BedColor.values()) {
+            Identifier identifier = bedColor.getIdentifier();
             ModelVariantMap modelVariantMap = this.method_10391(identifier);
-
-            for (BedBlock.BedBlockType type : BedBlock.BedBlockType.values()) {
+            for (BedBlock.BedBlockType bedPart : BedBlock.BedBlockType.values()) {
                 for (Direction direction : Direction.DirectionType.HORIZONTAL.getDirections()) {
-                    ModelIdentifier modelIdentifier = new ModelIdentifier(identifier, "facing=" + direction.name() + ",part=" + type.name());
-                    this.method_10387(modelVariantMap, modelIdentifier);
+                    this.method_10387(modelVariantMap, new ModelIdentifier(identifier, "facing=" + direction.name() + ",part=" + bedPart.name()));
                 }
             }
         }

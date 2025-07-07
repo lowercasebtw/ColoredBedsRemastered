@@ -1,6 +1,6 @@
 {
 	"textures": {
-		"bed": "colored_beds_remastered:entity/bed/blue",
+		"bed": "colored_beds_remastered:entity/bed/pink",
 		"particle": "minecraft:blocks/planks_oak"
 	},
 	"elements": [
