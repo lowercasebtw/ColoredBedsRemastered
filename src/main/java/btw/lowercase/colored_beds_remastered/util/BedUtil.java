@@ -22,8 +22,10 @@
 package btw.lowercase.colored_beds_remastered.util;
 
 import net.minecraft.block.BedBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,23 +38,36 @@ public class BedUtil {
     // NOTE: The blockPos is the position of the beds foot, not the head!
     static {
         BED_LOCATION_COLOR_MAP.put(new BlockPos(-7, 1, 0), BedColor.BLUE);
-        BED_LOCATION_COLOR_MAP.put(new BlockPos(-4, 1, -2), BedColor.GREEN);
+        BED_LOCATION_COLOR_MAP.put(new BlockPos(-5, 1, 2), BedColor.GREEN);
+        BED_LOCATION_COLOR_MAP.put(new BlockPos(-3, 1, 0), BedColor.PURPLE);
+        BED_LOCATION_COLOR_MAP.put(new BlockPos(-5, 1, -2), BedColor.WHITE);
     }
 
     public static boolean isBed(BlockPos pos) {
         World world = MinecraftClient.getInstance().world;
-        if (world == null) {
-            return false;
-        } else {
+        if (world != null) {
             return world.getBlockState(pos).getBlock() instanceof BedBlock;
+        } else {
+            return false;
         }
     }
 
-    public static @Nullable BedColor getBedColor(BlockPos pos) {
-        // TODO: Fix head direction fr
+    private static boolean expectPart(World world, BlockPos blockPos, BedBlock.BedBlockType part) {
+        BlockState state = world.getBlockState(blockPos);
+        if (state.getBlock() instanceof BedBlock) {
+            return state.get(BedBlock.BED_TYPE) == part;
+        } else {
+            return false;
+        }
+    }
+
+    public static @Nullable BedColor getBedColor(BlockPos pos, Direction direction) {
+        World world = MinecraftClient.getInstance().world;
         for (Map.Entry<BlockPos, BedColor> entry : BED_LOCATION_COLOR_MAP.entrySet()) {
-            BlockPos bedPos = entry.getKey();
-            if (pos.equals(bedPos) || pos.equals(bedPos.east()) || pos.equals(bedPos.west())) {
+            boolean isFoot = (expectPart(world, pos, BedBlock.BedBlockType.FOOT) && pos.equals(entry.getKey())) && (expectPart(world, pos.offset(direction), BedBlock.BedBlockType.HEAD));
+            BlockPos headPos = pos.offset(isFoot ? direction : direction.getOpposite());
+            boolean isHead = expectPart(world, pos, BedBlock.BedBlockType.HEAD) && ((expectPart(world, headPos, BedBlock.BedBlockType.FOOT) && headPos.equals(entry.getKey())));
+            if (isFoot || isHead) {
                 return entry.getValue();
             }
         }

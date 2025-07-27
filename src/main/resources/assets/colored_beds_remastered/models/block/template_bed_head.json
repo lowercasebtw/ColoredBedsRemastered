@@ -1,9 +1,5 @@
 {
-	"textures": {
-		"bed": "colored_beds_remastered:entity/bed/brown",
-		"particle": "minecraft:blocks/planks_oak"
-	},
-	"elements": [
+    "elements": [
 		{
 			"name": "top_left_leg",
 			"from": [13, 0, 13],

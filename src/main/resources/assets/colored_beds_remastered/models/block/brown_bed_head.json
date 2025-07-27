@@ -1,7 +1,7 @@
 {
 	"parent": "colored_beds_remastered:block/template_bed_head",
 	"textures": {
-		"bed": "colored_beds_remastered:entity/bed/green",
+		"bed": "colored_beds_remastered:entity/bed/brown",
 		"particle": "minecraft:blocks/planks_oak"
 	}
 }
