@@ -57,11 +57,15 @@ public class BedUtil {
 
     public static @Nullable BedColor getBedColor(BlockPos pos, EnumFacing direction) {
         World world = Minecraft.getMinecraft().theWorld;
-        return BED_LOCATION_COLOR_MAP.entrySet().stream().filter(entry -> {
+        for (Map.Entry<BlockPos, BedColor> entry : BED_LOCATION_COLOR_MAP.entrySet()) {
             boolean isFoot = (expectPart(world, pos, BlockBed.EnumPartType.FOOT) && pos.equals(entry.getKey())) && (expectPart(world, pos.offset(direction), BlockBed.EnumPartType.HEAD));
             BlockPos headPos = pos.offset(isFoot ? direction : direction.getOpposite());
             boolean isHead = expectPart(world, pos, BlockBed.EnumPartType.HEAD) && ((expectPart(world, headPos, BlockBed.EnumPartType.FOOT) && headPos.equals(entry.getKey())));
-            return isFoot || isHead;
-        }).findFirst().map(Map.Entry::getValue).orElse(null);
+            if (isFoot || isHead) {
+                return entry.getValue();
+            }
+        }
+
+        return null;
     }
 }
