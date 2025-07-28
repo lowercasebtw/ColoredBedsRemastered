@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// TODO/NOTE: This is for Legacy Fabric as Forge most likely has a API/way to do this
 @Mixin(ModelLoader.class)
 public abstract class MixinModelLoader {
     @Shadow
@@ -22,7 +23,7 @@ public abstract class MixinModelLoader {
     protected abstract void method_10387(ModelVariantMap modelVariantMap, ModelIdentifier modelIdentifier);
 
     @Inject(method = "method_10393", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelLoader;method_10396()V"))
-    private void coloredBedsRemastered$loadBlockstates(CallbackInfo ci) {
+    private void coloredBedsRemastered$registerStates(CallbackInfo ci) {
         for (BedColor bedColor : BedColor.values()) {
             Identifier identifier = bedColor.getIdentifier();
             ModelVariantMap modelVariantMap = this.method_10391(identifier);

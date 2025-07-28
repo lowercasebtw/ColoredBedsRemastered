@@ -22,7 +22,6 @@
 package btw.lowercase.colored_beds_remastered.util;
 
 import net.minecraft.block.BedBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -53,12 +52,7 @@ public class BedUtil {
     }
 
     private static boolean expectPart(World world, BlockPos blockPos, BedBlock.BedBlockType part) {
-        BlockState state = world.getBlockState(blockPos);
-        if (state.getBlock() instanceof BedBlock) {
-            return state.get(BedBlock.BED_TYPE) == part;
-        } else {
-            return false;
-        }
+        return world.getBlockState(blockPos).get(BedBlock.BED_TYPE) == part;
     }
 
     public static @Nullable BedColor getBedColor(BlockPos pos, Direction direction) {
