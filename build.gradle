@@ -16,7 +16,12 @@ static def getCheckedOutGitCommitHash() {
     'git rev-parse --verify --short HEAD'.execute().text.trim()
 }
 
-repositories {}
+repositories {
+    maven {
+        name = "cursed-mappings"
+        url = "https://raw.githubusercontent.com/BleachDev/cursed-mappings/main/"
+    }
+}
 
 loom {
     runs {
@@ -28,11 +33,11 @@ legacyLooming {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings(legacy.yarn(project.minecraft_version, project.yarn_build))
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    minecraft("com.mojang:minecraft:${project.minecraft_version}")
+    mappings("net.legacyfabric:yarn:${project.yarn_mappings}:v2")
+    modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
 
-    modImplementation "net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${project.fabric_version}"
+    modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${project.fabric_version}")
 }
 
 processResources {

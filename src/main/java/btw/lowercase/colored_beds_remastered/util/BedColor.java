@@ -22,11 +22,11 @@
 package btw.lowercase.colored_beds_remastered.util;
 
 import btw.lowercase.colored_beds_remastered.ColoredBedsRemastered;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
+import net.minecraft.block.BlockBed;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 
 public enum BedColor {
     WHITE,
@@ -46,13 +46,13 @@ public enum BedColor {
     MAGENTA,
     PINK;
 
-    public Identifier getIdentifier() {
+    public ResourceLocation getIdentifier() {
         return ColoredBedsRemastered.id(this.name().toLowerCase() + "_bed");
     }
 
-    public ModelIdentifier getBlockStateIdentifier(BlockState state) {
-        BedBlock.BedBlockType type = state.get(BedBlock.BED_TYPE);
-        Direction direction = state.get(BedBlock.FACING);
-        return new ModelIdentifier(this.getIdentifier(), "facing=" + direction.name() + ",part=" + type.name());
+    public ModelResourceLocation getBlockStateIdentifier(IBlockState state) {
+        BlockBed.EnumPartType type = state.getValue(BlockBed.PART);
+        EnumFacing direction = state.getValue(BlockBed.FACING);
+        return new ModelResourceLocation(this.getIdentifier(), "facing=" + direction.name() + ",part=" + type.name());
     }
 }

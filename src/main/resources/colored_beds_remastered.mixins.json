@@ -5,7 +5,7 @@
 	"compatibilityLevel": "JAVA_8",
 	"client": [
 		"MixinBlockModelRenderer",
-		"MixinModelLoader"
+		"MixinModelBakery"
 	],
 	"injectors": {
 		"defaultRequire": 1

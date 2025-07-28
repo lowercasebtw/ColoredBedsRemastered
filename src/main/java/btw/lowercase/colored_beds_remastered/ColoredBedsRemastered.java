@@ -22,13 +22,13 @@
 package btw.lowercase.colored_beds_remastered;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.ResourceLocation;
 
 public class ColoredBedsRemastered implements ClientModInitializer {
     public static final String MOD_ID = "colored_beds_remastered";
 
-    public static Identifier id(String path) {
-        return new Identifier(MOD_ID, path);
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
     @Override

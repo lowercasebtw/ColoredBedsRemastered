@@ -25,16 +25,16 @@ import btw.lowercase.colored_beds_remastered.util.BedColor;
 import btw.lowercase.colored_beds_remastered.util.BedUtil;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.block.BlockModelRenderer;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.BakedModelManager;
-import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockModelRenderer;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -44,16 +44,16 @@ import java.io.IOException;
 @Mixin(BlockModelRenderer.class)
 public abstract class MixinBlockModelRenderer {
     @Unique
-    private static BakedModel coloredBedsRemastered$getModelById(ModelIdentifier identifier) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        BakedModelManager modelManager = client.getBlockRenderManager().getModels().getBakedModelManager();
-        return modelManager.getByIdentifier(identifier);
+    private static IBakedModel coloredBedsRemastered$getModelById(ModelResourceLocation identifier) {
+        Minecraft client = Minecraft.getMinecraft();
+        ModelManager modelManager = client.getBlockRendererDispatcher().getBlockModelShapes().getModelManager();
+        return modelManager.getModel(identifier);
     }
 
-    @WrapOperation(method = "render(Lnet/minecraft/world/BlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModelRenderer;render(Lnet/minecraft/world/BlockView;Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/render/BufferBuilder;Z)Z"))
-    private boolean coloredBedsRemastered$redirectBedModel(BlockModelRenderer instance, BlockView blockView, BakedModel model, BlockState state, BlockPos pos, BufferBuilder buffer, boolean cull, Operation<Boolean> original) throws IOException {
+    @WrapOperation(method = "renderModel(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockPos;Lnet/minecraft/client/renderer/WorldRenderer;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/BlockModelRenderer;renderModel(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockPos;Lnet/minecraft/client/renderer/WorldRenderer;Z)Z"))
+    private boolean coloredBedsRemastered$redirectBedModel(BlockModelRenderer instance, IBlockAccess blockView, IBakedModel model, IBlockState state, BlockPos pos, WorldRenderer buffer, boolean cull, Operation<Boolean> original) throws IOException {
         if (BedUtil.isBed(pos)) {
-            BedColor color = BedUtil.getBedColor(pos, state.get(DirectionProperty.of("facing")));
+            BedColor color = BedUtil.getBedColor(pos, state.getValue(PropertyDirection.create("facing")));
             if (color != null) {
                 model = coloredBedsRemastered$getModelById(color.getBlockStateIdentifier(state));
             }
